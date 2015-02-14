@@ -13,3 +13,7 @@ Download and install Sahi `java -jar install_sahi_pro_v601_20141117.jar`
 `http://sahipro.com/downloads-archive/`
 
 Copy `license.data` to `~/sahi_pro/config`
+
+Install http-server https://github.com/nodeapps/http-server
+
+`npm install http-server -g`

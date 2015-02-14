@@ -2,10 +2,13 @@
 
 require 'capybara'
 require 'benchmark'
-require 'colorize'
+require 'bundler'
+Bundler.require(:default)
+require './helper'
+require './capybara'
 
 app = lambda do |env|
-  body = File.read('./fixture.html')
+  body = File.read("./public#{env['PATH_INFO']}.html")
   [
     200,
     {
@@ -22,15 +25,6 @@ Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app)
 end
 Capybara.default_driver = :rack_test
-
 include Capybara::DSL
 
-visit '/'
-
-puts Benchmark.realtime {
-  for i in 1..100 do
-    raise unless page.has_content?('Performance')
-    page.find('#text-input').set("value#{i}")
-    raise unless page.find('#text-input').value == "value#{i}"
-  end
-}.to_s.green
+test
