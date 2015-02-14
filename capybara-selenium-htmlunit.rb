@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 Thread.new { `java -jar ~/projects/selenium/selenium-server-standalone-2.44.0.jar -role hub -multiWindow >/dev/null 2>/dev/null` }
-while `curl -sL -w "%{http_code}" "localhost:4444" -o /dev/null` == '000'
+while `curl -w %{http_code} -s --output /dev/null $1 127.0.0.1:4444` == '000'
   sleep 1
 end
 Thread.new { `java -jar ~/projects/selenium/selenium-server-standalone-2.44.0.jar -role webdriver -hub http://127.0.0.1:4444/grid/register -port 5555 -browser browserName=htmlunit >/dev/null 2>/dev/null` }
-while `curl -sL -w "%{http_code}" "localhost:5555" -o /dev/null` == '000'
+while `curl -w %{http_code} -s --output /dev/null $1 127.0.0.1:5555` == '000'
   sleep 1
 end
 

@@ -24,3 +24,11 @@ def indexeddb(i, browser)
   browser.navigate_to "#{url}?r=#{i}_#{i}"
   raise if browser.listItem("value#{i}").exists1?
 end
+
+def select2(i, browser)
+  browser.navigate_to "http://select2.github.io/examples.html?r=#{i}"
+  raise unless browser.span('select2-selection__rendered').text == Sahi::Utils.quoted('Alaska')
+  browser.span('select2-selection__rendered').click
+  browser.listItem('Hawaii').click
+  raise unless browser.span('select2-selection__rendered').text == Sahi::Utils.quoted('Hawaii')
+end

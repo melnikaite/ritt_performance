@@ -3,7 +3,7 @@ def start_server
     `http-server --silent`
   end
 
-  while `curl -sL -w "%{http_code}" "localhost:8080"` == '000'
+  while `curl -w %{http_code} -s --output /dev/null $1 127.0.0.1:8080` == '000'
     sleep 0.1
   end
 end
@@ -23,14 +23,14 @@ end
 
 def test(browser = nil)
   server do
-    %w(input indexeddb).each do |test|
+    %w(input indexeddb select2).each do |test|
       begin
         realtime = Benchmark.realtime {
           for i in 1..10 do
             send(test, i, browser)
           end
         }.to_s
-      rescue
+      rescue => e
         puts "#{test} failed".red
       else
         puts "#{test} #{realtime}".green

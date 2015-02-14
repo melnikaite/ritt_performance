@@ -8,7 +8,9 @@ require './helper'
 require './capybara'
 
 app = lambda do |env|
-  body = File.read("./public#{env['PATH_INFO']}.html")
+  host = env['HTTP_HOST'].gsub('localhost', '127.0.0.1')
+  url = "#{env['rack.url_scheme']}://#{host}#{env['PATH_INFO']}"
+  body = `curl -s -X #{env['REQUEST_METHOD']} #{url}`
   [
     200,
     {

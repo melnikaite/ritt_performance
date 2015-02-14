@@ -6,7 +6,7 @@ Thread.new do
   FileUtils.chmod('+x', 'start_dashboard.sh')
   `./start_dashboard.sh >/dev/null 2>/dev/null`
 end
-while `curl -sL -w "%{http_code}" "localhost:9999"` == '000'
+while `curl -w %{http_code} -s --output /dev/null $1 127.0.0.1:9999` == '000'
   sleep 1
 end
 Dir.chdir(__dir__)

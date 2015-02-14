@@ -1,11 +1,11 @@
-def input(i)
+def input(i, browser)
   visit 'http://localhost:8080/input'
   raise unless page.has_content?('Performance')
   page.find('#text-input').set("value#{i}")
   raise unless page.find('#text-input').value == "value#{i}"
 end
 
-def indexeddb(i)
+def indexeddb(i, browser)
   url = 'http://localhost:8080/indexeddb'
   visit url
   page.find('#todo').set("value#{i}")
@@ -15,4 +15,12 @@ def indexeddb(i)
   page.find_link('[Delete]').click
   visit "#{url}?r=#{i}_#{i}"
   raise if page.first('li', text: "value#{i}")
+end
+
+def select2(i, browser)
+  visit 'http://select2.github.io/examples.html'
+  raise unless page.first('.select2-selection__rendered').text == 'Alaska'
+  page.first('.select2-selection__rendered').click
+  page.all('.select2-results__option', text: 'Hawaii')[1].click
+  raise unless page.first('.select2-selection__rendered').text == 'Hawaii'
 end
