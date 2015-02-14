@@ -2,6 +2,7 @@
 
 require 'capybara'
 require 'benchmark'
+require 'colorize'
 
 app = lambda do |env|
   body = File.read('./fixture.html')
@@ -29,7 +30,7 @@ visit '/'
 puts Benchmark.realtime {
   for i in 1..100 do
     raise unless page.has_content?('Performance')
-    page.find('#text-input').set('value')
-    raise unless page.find('#text-input').value == 'value'
+    page.find('#text-input').set("value#{i}")
+    raise unless page.find('#text-input').value == "value#{i}"
   end
-}
+}.to_s.green

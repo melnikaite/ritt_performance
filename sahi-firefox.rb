@@ -1,14 +1,32 @@
 #!/usr/bin/env ruby
-#cd ~/sahi_pro/userdata/bin/
-#./start_dashboard.sh
+Thread.new do
+  require 'fileutils'
+  Dir.chdir("#{Dir.home}/sahi_pro/userdata/bin")
+  FileUtils.chmod('+x', 'start_dashboard.sh')
+  `./start_dashboard.sh >/dev/null 2>/dev/null`
+end
+while `curl -sL -w "%{http_code}" "localhost:9999"` == '000'
+  sleep 1
+end
+#https://sahipro.com/docs/sahi-apis/index.html
 #http://sahipro.com/w/browser-types-xml
 #http://sahipro.com/w/ruby
 
 require 'sahi'
 require 'rack'
 require 'benchmark'
+require 'colorize'
+
+Sahi::Browser.class_eval do
+  def fetch(expression)
+    key = "___lastValue___" + Time.now.getutc.to_s;
+    execute_step("_sahi.setServerVar('"+key+"', " + expression + ")")
+    return check_nil(exec_command("getVariable", {"key" => key}))
+  end
+end
 
 app = lambda do |env|
+  Dir.chdir(__dir__)
   body = File.read('./fixture.html')
   [
     200,
@@ -37,11 +55,12 @@ begin
   puts Benchmark.realtime {
     for i in 1..100 do
       raise unless browser.contains_text?('Performance')
-      browser.textbox('text-input').value = 'value'
-      raise unless browser.textbox('text-input').value == 'value'
+      browser.textbox('text-input').value = "value#{i}"
+      raise unless browser.textbox('text-input').value == Sahi::Utils.quoted("value#{i}")
     end
-  }
+  }.to_s.green
 ensure
   `kill -9 #{pid}`
   browser.close
+  `ps aux | grep -ie sahi | awk '{print $2}' | xargs kill -9 >/dev/null 2>/dev/null`
 end

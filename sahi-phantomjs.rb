@@ -43,7 +43,7 @@ pid = fork do
 end
 
 begin
-  browser = Sahi::Browser.new('chrome')
+  browser = Sahi::Browser.new('phantomjs')
   browser.open
 
   until browser.is_ready?
