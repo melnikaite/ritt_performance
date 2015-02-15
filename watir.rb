@@ -42,3 +42,12 @@ def angularui(i, browser)
   raise unless browser.alert.text == 'Goodbye. Input content is: Focus and then Blur this input'
   browser.alert.ok
 end
+
+def bootstrap(i, browser)
+  browser.goto "http://getbootstrap.com/javascript/?r=#{i}#modals"
+  raise unless browser.button(text: 'Launch demo modal').exists?
+  browser.button(text: 'Launch demo modal').click
+  Watir::Wait.until do
+    browser.divs(class: 'modal-body')[1].h4.text == 'Text in a modal'
+  end
+end

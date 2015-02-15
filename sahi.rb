@@ -47,3 +47,10 @@ def angularui(i, browser)
   browser.heading3('').in(browser.section('event')).click
   raise unless browser.last_alert == Sahi::Utils.quoted('Goodbye. Input content is: Focus and then Blur this input')
 end
+
+def bootstrap(i, browser)
+  browser.navigate_to "http://getbootstrap.com/javascript/?r=#{i}#modals"
+  raise unless browser.button('Launch demo modal').exists?
+  browser.button('Launch demo modal').click
+  browser.heading4('').in(browser.div('modal-body').collect_similar[1]).text == Sahi::Utils.quoted('Text in a modal')
+end

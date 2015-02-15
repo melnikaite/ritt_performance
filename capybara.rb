@@ -43,3 +43,12 @@ def angularui(i, browser)
   raise unless page.driver.browser.switch_to.alert.text == 'Goodbye. Input content is: Focus and then Blur this input'
   page.driver.browser.switch_to.alert.accept
 end
+
+def bootstrap(i, browser)
+  visit "http://getbootstrap.com/javascript/?r=#{i}#modals"
+  raise unless page.find_button('Launch demo modal')
+  page.find_button('Launch demo modal').click
+  within page.all('.modal-body').last do
+    page.first('h4').text == 'Text in a modal'
+  end
+end
