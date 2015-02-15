@@ -32,3 +32,10 @@ def select2(i, browser)
   browser.listItem('Hawaii').click
   raise unless browser.span('select2-selection__rendered').text == Sahi::Utils.quoted('Hawaii')
 end
+
+def wysiwyg(i, browser)
+  browser.navigate_to "http://ckeditor.com/demo?r=#{i}#standard"
+  raise unless browser.heading1('Apollo 11').in(browser.iframe(1)).exists?
+  browser.execute_step("_sahi._rteWrite(_sahi._rte(1), '<h1>value#{i}</h1>')")
+  raise unless browser.heading1("value#{i}").in(browser.iframe(1)).exists?
+end

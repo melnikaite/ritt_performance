@@ -24,3 +24,13 @@ def select2(i, browser)
   page.all('.select2-results__option', text: 'Hawaii')[1].click
   raise unless page.first('.select2-selection__rendered').text == 'Hawaii'
 end
+
+def wysiwyg(i, browser)
+  visit "http://ckeditor.com/demo?r=#{i}#standard"
+  raise unless page.find('iframe.cke_wysiwyg_frame.cke_reset')
+  within_frame(1) do
+    raise unless page.find('h1').text == 'Apollo 11'
+    page.find('body').set("value#{i}")
+    raise unless page.find('h1').text == "value#{i}"
+  end
+end
