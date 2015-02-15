@@ -23,7 +23,7 @@ end
 
 def test(browser = nil)
   server do
-    %w(input indexeddb select2 wysiwyg).each do |test|
+    %w(input indexeddb select2 wysiwyg angularui).each do |test|
       begin
         realtime = Benchmark.realtime {
           for i in 1..10 do

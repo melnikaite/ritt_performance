@@ -39,3 +39,11 @@ def wysiwyg(i, browser)
   browser.execute_step("_sahi._rteWrite(_sahi._rte(1), '<h1>value#{i}</h1>')")
   raise unless browser.heading1("value#{i}").in(browser.iframe(1)).exists?
 end
+
+def angularui(i, browser)
+  browser.navigate_to 'http://angular-ui.github.io/ui-utils/'
+  raise unless browser.textbox('').in(browser.section('event')).exists?
+  browser.textbox('').in(browser.section('event')).click
+  browser.heading3('').in(browser.section('event')).click
+  raise unless browser.last_alert == Sahi::Utils.quoted('Goodbye. Input content is: Focus and then Blur this input')
+end

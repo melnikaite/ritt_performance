@@ -34,3 +34,12 @@ def wysiwyg(i, browser)
     raise unless page.find('h1').text == "value#{i}"
   end
 end
+
+def angularui(i, browser)
+  visit 'http://angular-ui.github.io/ui-utils/'
+  raise unless page.find('#event input')
+  page.find('#event input').click
+  page.first('#event h3').click
+  raise unless page.driver.browser.switch_to.alert.text == 'Goodbye. Input content is: Focus and then Blur this input'
+  page.driver.browser.switch_to.alert.accept
+end

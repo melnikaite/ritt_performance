@@ -33,3 +33,12 @@ def wysiwyg(i, browser)
   browser.iframe(title: 'Rich Text Editor, editor1').send_keys "value#{i}"
   raise unless browser.iframe(title: 'Rich Text Editor, editor1').h1(text: "value#{i} Apollo 11").exists?
 end
+
+def angularui(i, browser)
+  browser.goto 'http://angular-ui.github.io/ui-utils/'
+  raise unless browser.section(id: 'event').input.exists?
+  browser.section(id: 'event').input.click
+  browser.section(id: 'event').h3.click
+  raise unless browser.alert.text == 'Goodbye. Input content is: Focus and then Blur this input'
+  browser.alert.ok
+end
