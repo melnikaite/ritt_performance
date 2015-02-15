@@ -1,3 +1,25 @@
+module Watir
+  module Container
+    def circle(*args)
+      Circle.new(self, extract_selector(args).merge(:tag_name => 'circle'))
+    end
+
+    def circles(*args)
+      CircleCollection.new(self, extract_selector(args).merge(:tag_name => 'circle'))
+    end
+  end
+
+  class Circle < Element
+    attribute String, :cx, :cx
+  end
+
+  class CircleCollection < ElementCollection
+    def element_class
+      Circle
+    end
+  end
+end
+
 def input(i, browser)
   browser.goto 'http://localhost:8080/input'
   raise unless browser.text.include?('Performance')
@@ -49,5 +71,18 @@ def bootstrap(i, browser)
   browser.button(text: 'Launch demo modal').click
   Watir::Wait.until do
     browser.divs(class: 'modal-body')[1].h4.text == 'Text in a modal'
+  end
+end
+
+def d3(i, browser)
+  browser.goto 'http://mbostock.github.io/d3/talk/20111116/pack-hierarchy.html'
+  Watir::Wait.until do
+    browser.circle.exists?
+  end
+  circle = browser.elements(tag_name: 'circle')[2]
+  cx = circle.attribute_value('cx')
+  circle.click
+  Watir::Wait.while do
+    browser.circle(cx: cx).exists?
   end
 end

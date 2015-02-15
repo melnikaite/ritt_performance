@@ -54,3 +54,12 @@ def bootstrap(i, browser)
   browser.button('Launch demo modal').click
   browser.heading4('').in(browser.div('modal-body').collect_similar[1]).text == Sahi::Utils.quoted('Text in a modal')
 end
+
+def d3(i, browser)
+  browser.navigate_to 'http://mbostock.github.io/d3/talk/20111116/pack-hierarchy.html'
+  raise unless browser.circle('').exists?
+  circle = browser.circle('').collect_similar[2]
+  cx = browser.fetch("_sahi._circle('[2]').getAttribute('cx')")
+  circle.click
+  raise if browser.circle(cx: cx).exists?
+end

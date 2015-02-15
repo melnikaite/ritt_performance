@@ -1,3 +1,5 @@
+Capybara.default_wait_time = 10
+
 def input(i, browser)
   visit 'http://localhost:8080/input'
   raise unless page.has_content?('Performance')
@@ -51,4 +53,13 @@ def bootstrap(i, browser)
   within page.all('.modal-body').last do
     page.first('h4').text == 'Text in a modal'
   end
+end
+
+def d3(i, browser)
+  visit 'http://mbostock.github.io/d3/talk/20111116/pack-hierarchy.html'
+  raise unless page.has_selector?('circle')
+  circle = page.all('circle.parent')[2]
+  cx = circle['cx']
+  circle.click
+  raise unless page.has_no_selector?("circle[cx='#{cx}']")
 end
