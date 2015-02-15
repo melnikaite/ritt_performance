@@ -1,14 +1,14 @@
 Capybara.default_wait_time = 10
 
 def input(i, browser)
-  visit 'http://localhost:8080/input'
+  visit "http://#{`ifconfig | grep inet | grep broadcast | cut -d ' ' -f2`.strip}:8080/input"
   raise unless page.has_content?('Performance')
   page.find('#text-input').set("value#{i}")
   raise unless page.find('#text-input').value == "value#{i}"
 end
 
 def indexeddb(i, browser)
-  url = 'http://localhost:8080/indexeddb'
+  url = "http://#{`ifconfig | grep inet | grep broadcast | cut -d ' ' -f2`.strip}:8080/indexeddb"
   visit url
   page.find('#todo').set("value#{i}")
   page.find_button('add-todo-item').click
@@ -33,7 +33,7 @@ def wysiwyg(i, browser)
   within_frame(1) do
     raise unless page.find('h1').text == 'Apollo 11'
     page.find('body').set("value#{i}")
-    raise unless page.find('h1').text == "value#{i}"
+    raise unless page.find('h1').text.include?("value#{i}")
   end
 end
 
