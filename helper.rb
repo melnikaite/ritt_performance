@@ -29,7 +29,7 @@ def test(browser = nil)
           for i in 1..10 do
             send(test, i, browser)
           end
-        }.to_s
+        }.round(2)
       rescue => e
         puts "#{test} failed".red
       else
